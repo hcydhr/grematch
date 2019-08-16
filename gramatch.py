@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse, Circle
 from skimage import measure,draw
 from scipy.optimize import curve_fit,leastsq
-
+#happy
 def ellipsecurve(x,y, a, b, c,d,e,f):#椭圆方程
 
  return a*x*x+b*x*y+c*y*y+d*x+e*y+f

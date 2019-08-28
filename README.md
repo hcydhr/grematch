@@ -8,7 +8,7 @@ contours = measure.find_contours(thresh, 0.5)
 
 | 原图                                                         | 轮廓提取                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![1566951273012](/home/hechenxu/PycharmProjects/grematch/1566951273012.png) | ![1566951260981](/home/hechenxu/PycharmProjects/grematch/1566951260981.png) |
+| ![1566951273012](https://github.com/hcydhr/grematch/blob/master/1566951273012.png) | ![1566951260981](https://github.com/hcydhr/grematch/blob/master/1566951260981.png) |
 
 
 
@@ -20,7 +20,7 @@ approx = cv2.approxPolyDP(cnt, epsilon, True)  # 多边形拟合
 
 | 多边形拟合                                                   | 轮廓分割                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![1566951586020](/home/hechenxu/PycharmProjects/grematch/1566951586020.png) | ![1566951799318](/home/hechenxu/PycharmProjects/grematch/1566951799318.png) |
+| ![1566951586020](https://github.com/hcydhr/grematch/blob/master/1566951586020.png) | ![1566951799318](https://github.com/hcydhr/grematch/blob/master/1566951799318.png) |
 
 
 

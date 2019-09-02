@@ -6,7 +6,7 @@
 
 | 原图                                                         | 轮廓提取                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![1566951273012](/home/hechenxu/PycharmProjects/grematch/1566951273012.png) | ![1566951260981](/home/hechenxu/PycharmProjects/grematch/1566951260981.png) |
+| ![1566951273012](https://github.com/hcydhr/grematch/blob/master/1566951273012.png) | ![1566951260981](https://github.com/hcydhr/grematch/blob/master/1566951260981.png) |
 
 获取轮廓点集S={ (xi,yi) | i=1,2,3...m}
 
@@ -16,7 +16,7 @@
 
 | 多边形拟合                                                   | 轮廓分割                                                     |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![1566951586020](/home/hechenxu/PycharmProjects/grematch/1566951586020.png) | ![1566951799318](/home/hechenxu/PycharmProjects/grematch/1566951799318.png) |
+| ![1566951586020](https://github.com/hcydhr/grematch/blob/master/1566951586020.png) | ![1566951799318](https://github.com/hcydhr/grematch/blob/master/1566951799318.png) |
 
 将点集按照所属基元的不同分割为不同的子集。
 
@@ -28,7 +28,7 @@
 
 ## 三、基元拟合
 
-![1566951883167](/home/hechenxu/PycharmProjects/grematch/1566951883167.png)
+![1566951883167](https://github.com/hcydhr/grematch/blob/master/1566951883167.png)
 
 对划分后的点集进行基元拟合（最小二乘法）得到几何基元
 $$
@@ -64,13 +64,13 @@ $$
 
 |      | 模板                                                         | 目标                                                         |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 图像 | ![1566969893871](/home/hechenxu/PycharmProjects/grematch/assets/1566969893871.png) | ![1566970082132](/home/hechenxu/PycharmProjects/grematch/assets/1566970082132.png) |
+| 图像 | ![1566969893871](https://github.com/hcydhr/grematch/blob/master/1566969893871.png) | ![1566970082132](https://github.com/hcydhr/grematch/blob/master/1566970082132.png) |
 
 ![1567057042629](assets/1567057042629.png)
 
 |      | 模板                                                         | 目标                                                         |
 | ---- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 图像 | ![1566969893871](/home/hechenxu/PycharmProjects/grematch/assets/1566969893871.png) | ![1566970234929](/home/hechenxu/PycharmProjects/grematch/assets/1566970234929.png) |
+| 图像 | ![1566969893871](https://github.com/hcydhr/grematch/blob/master/1566969893871.png) | ![1566970234929](/home/hechenxu/PycharmProjects/grematch/assets/1566970234929.png) |
 
 ![1567057106161](assets/1567057106161.png)
 

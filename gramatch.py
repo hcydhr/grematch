@@ -1,3 +1,4 @@
+#_*_coding:utf-8_*_
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
@@ -6,19 +7,70 @@ from skimage import measure, draw
 from scipy.optimize import curve_fit, leastsq
 import math
 import copy
+def drawMatches(img1, gras1, img2, gras2):
+    rows1 = img1.shape[0]
+    cols1 = img1.shape[1]
+    rows2 = img2.shape[0]
+    cols2 = img2.shape[1]
+    out = np.zeros((max([rows1, rows2]), cols1 + cols2, 3), dtype="uint8")
+    out[:rows1, :cols1] = np.dstack([img1[:, :, 0], img1[:, :, 0], img1[:, :, 0]])
+    out[:rows2, cols1:] = np.dstack([img2[:, :, 0], img2[:, :, 0], img2[:, :, 0]])
+    num = 0
+    for i,gra in enumerate(gras1):
+        if len(gra)==2:
+            [[x1, y1]] = gra[0]
+            if len(gras2[i]) == 2:
+                [[x2, y2]] = gras2[i][0]
+        if len(gra)==1:
+            [x1, y1] = gra[0][0][0]
+            if len(gras2[i]) == 1:
+                [x2, y2] = gras2[i][0][0][0]
+        #j = kp2[num]
+        num += 1
+        #[[x1, y1]] = i
+        #[[x2, y2]] = j
+        a = np.random.randint(0, 256)
+        b = np.random.randint(0, 256)
+        c = np.random.randint(0, 256)
+        cv2.line(
+            out,
+            (int(np.round(x1)), int(np.round(y1))),
+            (int(np.round(x2) + cols1), int(np.round(y2))),
+            (a, b, c),
+            10,
+            shift=0,
+        )
+
+    for i,gra in enumerate(gras1):
+        if len(gra)==2:
+            [[x1, y1]] = gra[1]
+            if len(gras2[i]) == 2:
+                [[x2, y2]] = gras2[i][1]
+        #j = kp2[num]
+        num += 1
+        #[[x1, y1]] = i
+        #[[x2, y2]] = j
+        a = np.random.randint(0, 256)
+        b = np.random.randint(0, 256)
+        c = np.random.randint(0, 256)
+        cv2.line(
+            out,
+            (int(np.round(x1)), int(np.round(y1))),
+            (int(np.round(x2) + cols1), int(np.round(y2))),
+            (a, b, c),
+            10,
+            shift=0,
+        )
+    return out
 
 def fami(gras1,gras2):
-    for i,gra in enumerate(gras):
+    for i,gra in enumerate(gras1):
         if len(gra)==2:
-            print('line')
 
-
-
-        if len(gra)==1:
-            print('ell')
+            print('')
     plt.show()
 
-def result(x,y,gras1,gras2):
+def result(x,y,gras1,gras2):#将几何基元列表重新排序，使得对应基元序号对应
     for i in range(x+1):
         l = len(gras1)
         tmp=gras1[0]
@@ -33,7 +85,7 @@ def result(x,y,gras1,gras2):
     return gras1,gras2
 
 
-def matsslist(mats):
+def matsslist(mats):#得到排序后的几何基元列表
     # nor=mats[0][0]
     # for i, mat in enumerate(mats):
     #     mats[i][0] = (mats[i][0] * 100 / nor)
@@ -43,7 +95,8 @@ def matsslist(mats):
         tmp=mats[0]
         mats[0:l-1]=mats[1:l]
         mats[-1]=tmp
-        matsc=mats.copy()
+        #matsc=mats.copy()
+        matsc=copy.deepcopy(mats)
         nor1 = matsc[0][0]
         for i,mat in enumerate(matsc):
             matsc[i][0]=(matsc[i][0]*100/nor1)
@@ -51,7 +104,7 @@ def matsslist(mats):
         matss.append(copy.deepcopy(matsc))
     return matss
 
-def match(mats1,mats2):
+def match(mats1,mats2):#匹配几何基元，输出相似度最大的几何基元位置
     matss1=matsslist(mats1)
     #print(mats1)
     matss2 = matsslist(mats2)
@@ -88,7 +141,7 @@ def match(mats1,mats2):
     # matss=[]
     # for i,mat in enumerate(mats1):
     #     l=len(mats1)
-    #     tmp=mats1[0]
+    #     tmp=vmats1[0]
     #     mats1[0:l-1]=mats1[1:l]
     #     mats1[-1]=tmp
     #     mats1c=mats1.copy()
@@ -312,7 +365,7 @@ def lineget(cnt, mean_disten):#获取线段、输入一个轮廓、输出线段�
             if distens2 > (mean_disten):
                 lines.append(np.array([cnt[i - 1], cnt[i - 2]]))
     # if np.array([cnt[i],cnt[i-1]]) in lines:
-    # if cnt[i] in lines:
+
     # lines.append(np.array([cnt[i+1], cnt[i]]))
     # for i,line in enumerate(lines):
     #    a=lines[i-1][0,0]
@@ -337,7 +390,7 @@ def gras(img):  # 求几何基元
     imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换灰度模式
     imgx = cv2.imread("b.png")
     edges = cv2.Canny(imgray, 50, 150, apertureSize=3)
-    #plt.imshow(np.rot90(imgx))
+    #plt.imshow(np.flipud( np.rot90(imgx)))
     # blur = cv2.GaussianBlur(imgray, (5, 5), 0)
     blur = imgray
     ret, thresh = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
@@ -358,18 +411,18 @@ def gras(img):  # 求几何基元
         # print(approx.shape)
         xa = approx[:, 0, 0]  # 拟合后
         ya = approx[:, 0, 1]
-        # plt.scatter(xa, ya)#拟合点
+        # plt.scatter(xa, ya)#拟合点1
 
         # 提取直线
         lines = lineget(approx, mean_dis)
         #print(lines)
-        # 画直线
+        #画直线
         # for i, line in enumerate(lines):
         #
         #     plt.plot(
         #         [line[0, 0, 0], line[1, 0, 0]], [line[0, 0, 1], line[1, 0, 1]], "r"
         #     )
-        # 提取弧线
+        #提取弧线
         unlines,gra = unlinesget(approx, mean_dis)
         # 画弧线
         #print(gra)
@@ -385,40 +438,40 @@ def gras(img):  # 求几何基元
         # # 拟合椭圆
         ellipses = ellipsefit(unlines)
         #print(ellipses)
-        # 画椭圆
-        # for ellipse in ellipses:
-        #     ox = ellipse[0][0][0]
-        #     oy = ellipse[0][0][1]
-        #     rs = ellipse[0][1][0]
-        #     rl = ellipse[0][1][1]
-        #     theta = ellipse[0][2]
-        #     # print(ellipse[1])
-        #     # plt.plot([ox,ox+rs/2], [oy,oy])
-        #     # plt.plot([ox, ox ], [oy, oy + rl/2])
-        #     # x = y = np.arange(-4, 4, 0.1)
-        #     # x, y = np.meshgrid(x, y)
-        #     # plt.contour(x, y, x ** 2 / 9 + y ** 2 - 1, [0])
-        #     x, y = get_ellipse(ox, oy, rs / 2, rl / 2, theta)
-        #     ell = [x, y]
-        #     for i, xline in enumerate(x):
-        #         if xline < ellipse[1][0] or xline > ellipse[2][0]:
-        #             del ell[0][i]
-        #             del ell[1][i]
-        #     for i, xline in enumerate(y):
-        #         if xline < ellipse[1][1] or xline > ellipse[2][1]:
-        #             del ell[0][i]
-        #             del ell[1][i]
-        #     plt.plot(ell[0], ell[1], "b")
-        #     plt.plot(
-        #         [ellipse[0][0][0], ellipse[6][0, 0]],
-        #         [ellipse[0][0][1], ellipse[6][0, 1]],
-        #         "r--",
-        #     )
-        #     plt.plot(
-        #         [ellipse[5][0, 0], ellipse[0][0][0]],
-        #         [ellipse[5][0, 1], ellipse[0][0][1]],
-        #         "r--",
-        #     )
+        #画椭圆
+        for ellipse in ellipses:
+            ox = ellipse[0][0][0]
+            oy = ellipse[0][0][1]
+            rs = ellipse[0][1][0]
+            rl = ellipse[0][1][1]
+            theta = ellipse[0][2]
+            # print(ellipse[1])
+            # plt.plot([ox,ox+rs/2], [oy,oy])
+            # plt.plot([ox, ox ], [oy, oy + rl/2])
+            # x = y = np.arange(-4, 4, 0.1)
+            # x, y = np.meshgrid(x, y)
+            # plt.contour(x, y, x ** 2 / 9 + y ** 2 - 1, [0])
+            x, y = get_ellipse(ox, oy, rs / 2, rl / 2, theta)
+            ell = [x, y]
+            for i, xline in enumerate(x):
+                if xline < ellipse[1][0] or xline > ellipse[2][0]:
+                    del ell[0][i]
+                    del ell[1][i]
+            for i, xline in enumerate(y):
+                if xline < ellipse[1][1] or xline > ellipse[2][1]:
+                    del ell[0][i]
+                    del ell[1][i]
+            # plt.plot(ell[0], ell[1], "b")
+            # plt.plot(
+            #     [ellipse[0][0][0], ellipse[6][0, 0]],
+            #     [ellipse[0][0][1], ellipse[6][0, 1]],
+            #     "r--",
+            # )
+            # plt.plot(
+            #     [ellipse[5][0, 0], ellipse[0][0][0]],
+            #     [ellipse[5][0, 1], ellipse[0][0][1]],
+            #     "r--",
+            # )
 
         # print(line)
 
@@ -434,6 +487,11 @@ if __name__ == "__main__":
     gras2 = gras(img2)  # 获取几何基元
     mats2 = matgra(gras2)  # 获取形状
     x,y= match(mats1,mats2)#匹配
-    gras1new, gras2new= result(x,y,gras1,gras2)
-    fami(gras1new,gras2new)
-    print(gras1[x+1],gras2[y+1])
+    gras1new, gras2new= result(x,y,gras1,gras2)#匹配后的基元列表，一一对应
+    #fami(gras1new,gras2new)
+    img1=np.flipud( np.rot90(img1))
+    img2 = np.flipud(np.rot90(img2))
+    out= drawMatches(img1,gras1new,img2,gras2new)
+    plt.imshow(out)
+    plt.show()
+    print(gras1new,gras2new)
